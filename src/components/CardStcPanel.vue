@@ -120,8 +120,10 @@ export default {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
-  margin: 10px 15px -9px 15px;
-  height: 40px;
+  margin: 10px 0 -9px 0;
+  padding-left: 15px;
+  padding-right: 15px;
+  height: 50px;
   border-top: 1px solid #E5E5E5;
   align-items: center;
   justify-content: space-between;
