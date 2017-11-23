@@ -156,7 +156,9 @@ export default {
 .gallery__row .remark-image{
   display: inline-block;
   width: calc(33.3vw - 37.3px); 
-  height: calc(33.3vw - 37.3px); 
+  height: calc(33.3vw - 37.3px);
+  max-height: 110px;
+  max-width: 110px;
   margin-left: 5px; 
   vertical-align: middle;
   background-size: contain;

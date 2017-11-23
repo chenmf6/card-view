@@ -14,7 +14,6 @@
 <script>
 import { Loading, Alert, AjaxPlugin } from "vux"
 import Vue from "vue"
-// import axios from 'axios'
 import util from "./util"
 import CardPreview from "./components/CardPreview"
 import CardStcPanel from "./components/CardStcPanel"
@@ -66,7 +65,7 @@ export default {
 
   methods: {    
     parseParams(url) {
-      let reg = /[?&][^?&]+=[^?&]+/g
+      let reg = /[?&](cardid|aid)=[^?&]+/g
       let params = {}
       url.match(reg).forEach(item => {
         let [key, val = ""] = item.substring(1).split("=")
@@ -87,35 +86,37 @@ export default {
     },
 
     request(params, success, fail) {
-      let url = apiPrefix + `/view?cardid=${params.cardid}&aid=${params.aid}`
+      // let url = apiPrefix + `/view?cardid=${params.cardid}&aid=${params.aid}`
+      let url = apiPrefix + '/view'
       this.isLoading = true
       AjaxPlugin.$http({
-          method: 'get',
-          url
-        })
-        .then(res => {
-          this.isLoading = false
-          res = this.clearBOMAndParseJson(res.data)
-          console.log('res', res)
-          if (res.code === 0) {
-            success(res.data)
-          } else {
-            fail(res.message)
-          }
-        })
-        .catch(error => {
-          this.isLoading = false
-          fail(error)
-        })
+        method: 'get',
+        params,
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded'
+        },
+        url
+      })
+      .then(res => {
+        this.isLoading = false
+        res = this.clearBOMAndParseJson(res.data)
+        console.log('res', res)
+        if (res.code === 0) {
+          success(res.data)
+        } else {
+          fail(res.message)
+        }
+      })
+      .catch(error => {
+        this.isLoading = false
+        fail(error)
+      })
     },
 
     loadCard(data) {
       let {
         card,
         images,
-        isfav,
-        islike,
-        connection,
         isverifymobile: isVerifyMobile
       } = data
       if (!card) return
