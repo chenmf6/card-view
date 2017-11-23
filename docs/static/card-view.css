@@ -1,0 +1,10 @@
+
+body {
+  background-color: #fcf9fe;
+  margin: 0;
+  width: 100%;
+}
+.swiper-container .vux-slider > .vux-swiper > .vux-swiper-item > a > .vux-img{
+  background-size: contain !important;
+}
+
