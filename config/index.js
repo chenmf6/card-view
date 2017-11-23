@@ -6,11 +6,18 @@ const path = require('path')
 
 module.exports = {
   dev: {
-
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/view': {
+        target: 'https://newapi.ibos.cn/v4/weappcard',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/view': '/view'
+        }
+      }
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
@@ -55,7 +62,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: './',
 
     /**
      * Source Maps
@@ -77,27 +84,5 @@ module.exports = {
     // `npm run build --report`
     // Set to `true` or `false` to always turn it on or off
     bundleAnalyzerReport: process.env.npm_config_report
-  },
-  dev: {
-    env: require('./dev.env'),
-    port: 8080,
-    autoOpenBrowser: true,
-    assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
-    proxyTable: {
-      '/view': {
-        target: 'https://newapi.ibos.cn/v4/weappcard',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/view': '/view'
-        }
-      }
-    },
-    // CSS Sourcemaps off by default because relative paths are "buggy"
-    // with this option, according to the CSS-Loader README
-    // (https://github.com/webpack/css-loader#sourcemaps)
-    // In our experience, they generally work as expected,
-    // just be aware of this issue when enabling this option.
-    cssSourceMap: false
   }
 }
