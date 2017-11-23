@@ -19,7 +19,7 @@
       <div class="weui-flex">
         <div class="weui-card-fav-cell-as">
           <div class="nc-avatar-placeholder" v-for="(item, index) in connection.avatarArray" :key="index">
-            <img class="nc-avatar-img" alt="" :src="item.avatar"></img>
+            <img v-if="item.avatar" class="nc-avatar-img" alt="" :src="item.avatar"></img>
           </div>
         </div> 
         <div class="weui-cell__ft">{{ card.viewfavs || 0 }}人</div>
@@ -30,14 +30,7 @@
 
 <script>
 export default {
-  props: ['card', 'connection'],
-  updated () {
-    this.$nextTick(() => {
-      this.connection.avatarArray.forEach(item => {
-        console.log(item)
-      })
-    })
-  }
+  props: ['card', 'connection']
 }
 </script>
 
@@ -146,10 +139,9 @@ export default {
 .card-stc-panel .nc-avatar-placeholder {
   width: 5.3vw;
   height: 5.3vw;
-  box-sizing: border-box;
   border: 1px solid #fff;
   border-radius: 50%;
-  margin-left: -1.3vw;
+  margin-left: -1.32vw;
 }
 
 .weui-flex {

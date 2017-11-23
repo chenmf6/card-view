@@ -8,12 +8,6 @@ body {
   background-size: contain !important;
 }
 
-.nc-avatar-img{
-  height: 100%;
-  width: 100%;
-  vertical-align:top;  
-}
-
 .card-footer {
   font-size: 14px;
   line-height: 68px;
@@ -22,6 +16,11 @@ body {
   color:#bfbfbf;
 }
 
+.nc-avatar-img{
+  height: 100%;
+  width: 100%;
+  vertical-align:center;  
+}
 .nc-avatar-placeholder {
   position:relative;
   box-sizing:border-box;
