@@ -1,3 +1,5 @@
+const CARD_AVATAR_CLIP = '120w_120h_1c_1e'
+const REMARK_IMG_CLIP = '200w_200h_1c_1e'
 
 /**
  * 对于 img.ibos.cn 的图片加上图片裁剪
@@ -5,7 +7,7 @@
  * @param  {String} cliper 裁剪规则
  * @return {String}        图片地址
  */
-function clipImage (imgUrl, cliper) {
+function clipImage (imgUrl, cliper = REMARK_IMG_CLIP) {
   if (/^https?:\/\/img.ibos.cn/.test(imgUrl)) {
     return imgUrl + '@' + cliper
   } else {
@@ -14,7 +16,7 @@ function clipImage (imgUrl, cliper) {
 }
 
 // 获取头像缩略图
-function getAvatar (avatar, cliper) {
+function getAvatar (avatar, cliper = CARD_AVATAR_CLIP) {
   return clipImage(avatar, cliper)
 }
 

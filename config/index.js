@@ -11,7 +11,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/view': {
-        target: 'https://newapi.ibos.cn/v4/weappcard',
+        target: 'https://api.ibos.cn/v4/weappcard',
         changeOrigin: true,
         pathRewrite: {
           '^/view': '/view'

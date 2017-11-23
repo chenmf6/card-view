@@ -3,7 +3,7 @@
 <div id="card-preview" class="card-wrap">
   <div class="card">
     <div class="nc-avatar-placeholder">
-      <img class="nc-avatar-img" :src="card.avatarThumb"></img>
+      <img class="nc-avatar-img"  alt="" :src="card.avatarThumb"></img>
     </div>
     <div class="card-header">
       <span class="card-realname">{{ card.realname || '暂无' }}</span>
@@ -12,7 +12,8 @@
     <div class="card-data">
       <div class="card-data-item">
         <div class="card-data-item-label">手机</div>
-        <span class="card-data-mobile" :class="{'card-data-mobile-verify' : isVerifyMobile}">{{ card.formattedMobile || '读取中...' }}</span>
+        <a v-if="isVerifyMobile" :href="'tel:' + card.mobile"><span class="card-data-mobile card-data-mobile-verify">{{ card.formattedMobile || '读取中...' }}</span></a>
+        <span v-else @click="hintDial" class="card-data-mobile">{{ card.formattedMobile || '读取中...' }}</span>
       </div>
       <div class="card-data-item">
         <div class="card-data-item-label">公司</div>
@@ -31,25 +32,24 @@
 
 <script>
 export default {
-  props: ['card', 'isVerifyMobile']
+  props: ['card', 'isVerifyMobile', 'alert'],
+  methods: {
+    hintDial () {
+      this.alert('未验证的号码不支持一键拨打')
+    }
+  }
 }
 </script>
 
 <style scoped>
 .card-wrap{
-  position: relative;
-  margin: auto;
-  z-index: 1;
-  width: 92vw;
-  box-sizing: border-box;
+  padding: 15px;
 }
 .card{
-  margin-top: 10px;
-  padding: 3vh 5vw;
-  background-color: #fff;
-  border-radius: 5px;
-  border: 1px solid #e5e5e5;
-  box-shadow: 1px 5px 5px #efefef;
+  position:relative;
+  padding:20px 15px 15px;
+  background-color:#fff;
+  min-height:163px;
 }
 .card-header{
   margin-right: 16.82vw;
@@ -107,22 +107,17 @@ export default {
   position: absolute;
   top: 0;
   right: 0;
-  margin: 3vh 5vw 0 0;
+  margin: 20px 15px 0 0;
   width: 16.82vw;
   height: 16.82vw;
-  overflow: hidden;
-}
-.nc-avatar-img{
-  height: 100%;
-  width: 100%;
-  vertical-align: middle;
-}
-.nc-avatar-placeholder{
-  border: 1px solid #b4b4b4;
+  border: 1px solid #b5b5b5;
   border-radius: 4px;
-  background-size: 64%;
-  background: #fff url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAABgFBMVEUAAADJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnJyclqquSWAAAAf3RSTlMAAQIDBAUGBwgJCgsNDg8QERIXHB0eICEiJCYnKCkqLC0uLzY9Pj9BQkNFR0lLTVRVVlhaXF1jZGVoaWtsbW5vcXR1fH1+hIeJkJGTmJmfoKKlp6yusLK1t7i6vL/AwsPHzM7P0tPV19jZ29zd4OTn6evs7e/x8vb3+Pn6+/z++xZVNQAAAadJREFUGBmlwftfy1EYB/DP1lepxCi33CKhkvsll5YQiwrRSppbQsVmNqK1Pv86Lz+gs+95nnN23m8Ijt2Z+fyT1cKL0SPwlzj3hv/keuDpwGtu9ngbfJxfpWlpL9xdZ4z8fri6xFjLO+Hm6CrjZeEkWqDNRbi4QatCM3RNBdoNQXeZgqUEVHOUdEPTtk7JPWj6KcpBc5uiMjTjlG2HYoqyPVBMU7YPikeUdUAxQdkOKO5TVN0CxRWKPkFzgqJZaForlNyFap6SbqiuUrCShKqlTLtbcDBCq3wzHDQt0+YCnBzfYLxpOMowVnEXHDUuMM4ZODv8g7Um4CHNGiut8BB9oOksvAzTkE/CSxcNT+CnnYYH8NNDwyz8TNJQ2Q0f/Rs0PW+Au5PfWGuqEY6i0SrjvD0EJ32LtFjLtEHVmaXgy2ADRKmxdcrenYJdlC5Rl+2ExcBHOqmMpRCja47OSukIhtTDKn2878X/EoNF+nragb8OvmQdvg8l8Ufi5hrr86odv7U8Y92+9gJbcwxQOY0Mg5RQZhgwEBgIDAQGAgOhyDC4xiCLvwBK8zwld8eicgAAAABJRU5ErkJggg==') center no-repeat;
 }
+
+.card a {
+  text-decoration: none;
+}
+
 </style>
 
 

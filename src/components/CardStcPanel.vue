@@ -1,17 +1,28 @@
 <template>
   <div class="card-stc-panel">
     <div class="weui-grids">
-      <div class="weui-grid" hover-class="weui-grid_active">
+      <div class="weui-grid">
         <img class="weui-grid__icon" src='../assets/images/eye.png' />
         <div class="weui-grid__label"><span>人气：{{ card.views || 0 }}</span></div>
       </div>
-      <div class="weui-grid" hover-class="weui-grid_active">
+      <div class="weui-grid">
         <img class="weui-grid__icon" src='../assets/images/heart.png'/>
         <div class="weui-grid__label"><span>赞：{{ card.viewlikes || 0 }}</span></div>
       </div>
-      <div class="weui-grid" hover-class="weui-grid_active">
-        <img class="weui-grid__icon" src='../assets/images/group.png'/>
-        <div class="weui-grid__label"><span>人脉：{{ card.viewfavs || 0 }}</span></div>
+      <div class="weui-grid">
+        <img class="weui-grid__icon" src='../assets/images/comments.png'/>
+        <div class="weui-grid__label"><span>留言：{{ card.viewcomments || 0 }}</span></div>
+      </div>
+    </div>
+    <div class="weui-card-fav-cell">
+      <div>我的人脉</div>
+      <div class="weui-flex">
+        <div class="weui-card-fav-cell-as">
+          <div class="nc-avatar-placeholder" v-for="(item, index) in connection.avatarArray" :key="index">
+            <img class="nc-avatar-img" alt="" :src="item.avatar"></img>
+          </div>
+        </div> 
+        <div class="weui-cell__ft">{{ card.viewfavs || 0 }}人</div>
       </div>
     </div>
   </div>
@@ -19,23 +30,26 @@
 
 <script>
 export default {
-  props: ['card']
+  props: ['card', 'connection'],
+  updated () {
+    this.$nextTick(() => {
+      this.connection.avatarArray.forEach(item => {
+        console.log(item)
+      })
+    })
+  }
 }
 </script>
 
 <style scoped>
 /* panel */
 .card-stc-panel{
-  position: relative;
-  top: -50px;
-  margin-bottom: -50px;
   width: 100%;
   background-color: #fff;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  padding-top: calc(45px + 3vh);
+  padding-top: 10px;
   padding-bottom: 10px;
-  border-bottom: 1px solid #eaeaea;
+  border-top: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
 }
 
 .weui-grids {
@@ -100,4 +114,50 @@ export default {
 .card-stc-panel .weui-grid:last-child::after{
   display: none;
 }
+
+/* 人脉 */
+.weui-card-fav-cell {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  margin: 10px 15px -9px 15px;
+  height: 40px;
+  border-top: 1px solid #E5E5E5;
+  align-items: center;
+  justify-content: space-between;
+  color: #000000;
+  font-size: 16px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.weui-card-fav-cell-as {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  flex-direction: row-reverse;
+  margin-right: 2.7vw;
+  margin-top: 2px;
+}
+
+.card-stc-panel .nc-avatar-placeholder {
+  width: 5.3vw;
+  height: 5.3vw;
+  box-sizing: border-box;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  margin-left: -1.3vw;
+}
+
+.weui-flex {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+}
+.weui-cell__ft {
+  text-align: right;
+  color:#999;
+}
+
 </style>

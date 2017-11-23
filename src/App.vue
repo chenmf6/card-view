@@ -1,13 +1,14 @@
 <template>
   <div id="app">
-    <loading v-model="isLoading" ></loading>
-    <alert v-model="showAlert" title="加载失败" :content="alertContent"></alert>
+    <loading v-model="showLoading"></loading>
+    <alert v-model="showAlert" :title="alertTitle" :content="alertContent"></alert>
     <!-- 卡片预览 -->
-    <card-preview :card="card" :isVerifyMobile="isVerifyMobile"></card-preview>
+    <card-preview :card="card" :isVerifyMobile="isVerifyMobile" :alert="alert"></card-preview>
     <!-- 统计面板 -->
-    <card-stc-panel :card="card"></card-stc-panel>
+    <card-stc-panel :card="card" :connection="connection"></card-stc-panel>
     <!-- 更多 -->
     <card-remark :card="card" :chunkedImages="chunkedImages" :images="images"></card-remark>
+    <div class="card-footer">微信使用名片：发现-小程序-搜索“群应用”</div>
   </div>
 </template>
 
@@ -21,7 +22,7 @@ import CardRemark from "./components/CardRemark"
 
 Vue.use(AjaxPlugin)
 
-const apiPrefix = process.env.NODE_ENV === 'production' ? 'https://newapi.ibos.cn/v4/weappcard' : ''
+const apiPrefix = process.env.NODE_ENV === 'production' ? 'https://api.ibos.cn/v4/weappcard' : ''
 export default {
   name: "app",
 
@@ -31,10 +32,14 @@ export default {
       isVerifyMobile: false,
       chunkedImages: [],
       images: [],
-      isLoading: false,
-      loadText: "加载中",
+      connection: {
+        count: 0,
+        avatarArray: []
+      },
+      showLoading: false,
       showAlert: false,
-      alertContent: ''
+      alertContent: '',
+      alertTitle: ''
     }
   },
 
@@ -47,9 +52,8 @@ export default {
   },
 
   created() {
-    // let url = window.location.href
-    let url =
-      "/pages/view/view?cardid=1716337&aid=bdaaba6b3a73a7da764313da3858cce6&fromuid=14058136&initiative=1"
+    let url = window.location.href
+    // let url = '/pages/view/view?cardid=1720146&aid=ac1bb8347be75ce6d9403488ae78faef'
     let params = this.parseParams(url)
     this.request(
       params,
@@ -57,13 +61,17 @@ export default {
         this.loadCard(data)
       },
       err => {
-        this.showAlert = true
-        this.alertContent = err
+        this.alert(err, '加载失败')        
       }
     )
   },
 
-  methods: {    
+  methods: {
+    alert (content = '', title = '') {
+      this.showAlert = true
+      this.alertTitle = title
+      this.alertContent = content
+    },
     parseParams(url) {
       let reg = /[?&](cardid|aid)=[^?&]+/g
       let params = {}
@@ -88,19 +96,15 @@ export default {
     request(params, success, fail) {
       // let url = apiPrefix + `/view?cardid=${params.cardid}&aid=${params.aid}`
       let url = apiPrefix + '/view'
-      this.isLoading = true
+      this.showLoading = true
       AjaxPlugin.$http({
         method: 'get',
         params,
-        headers: {
-          'Content-type': 'application/x-www-form-urlencoded'
-        },
         url
       })
       .then(res => {
-        this.isLoading = false
+        this.showLoading = false
         res = this.clearBOMAndParseJson(res.data)
-        console.log('res', res)
         if (res.code === 0) {
           success(res.data)
         } else {
@@ -108,33 +112,37 @@ export default {
         }
       })
       .catch(error => {
-        this.isLoading = false
+        this.showLoading = false
         fail(error)
       })
     },
 
     loadCard(data) {
+      console.log('loadCard', data)
       let {
         card,
         images,
+        connection,
         isverifymobile: isVerifyMobile
       } = data
       if (!card) return
       if(card.realname) {
         document.title = card.realname + '的名片'
       }
+      
       this.formatCardData(card)
       this.addRemarkImagesThumb(images)
       this.card = card
+      // this.isVerifyMobile = false
       this.isVerifyMobile = isVerifyMobile
+      this.connection = connection
       this.chunkedImages = util.chunk(images, 3)
       this.images = images
-      console.log(this.$data)
     },
 
     formatCardData(card) {
       if (!card) return
-      card.avatarThumb = util.getAvatar(card.avatar, this.CARD_AVATAR_CLIP)
+      card.avatarThumb = util.getAvatar(card.avatar)
       card.formattedMobile = util.formatMobile(card.mobile)
       card.views = util.convertNumber(card.views)
       card.viewlikes = util.convertNumber(card.likes)
@@ -145,7 +153,7 @@ export default {
     addRemarkImagesThumb: function(images) {
       if (!images || !images.length) return
       images.forEach(img => {
-        img.thumbSrc = util.clipImage(img.src || img.cover, "200w_200h_1c_1e")
+        img.thumbSrc = util.clipImage(img.src || img.cover)
       })
     }
   }

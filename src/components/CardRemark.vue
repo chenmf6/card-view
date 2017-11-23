@@ -17,15 +17,13 @@
       </div>
     </div>
     <div v-if="showPreview" @click="stopPreview" class="swiper-container">
-      <swiper :list="imgList" :value="previewIndex" :auto="false" :showDescMask="false" :aspectRatio="1" class="swiper-body"></swiper>
+      <swiper :list="imgList" :value="previewIndex" :auto="false" :showDescMask="false" :aspectRatio="1" dotsPosition="center" class="swiper-body"></swiper>
     </div>
-    
-    <!-- <previewer v-if="showPreview" :list="imageUrls" :index="previewIndex"></previewer> -->
   </div>
 </template>
 
 <script>
-import { Swiper, Previewer } from 'vux'
+import { Swiper } from 'vux'
 export default {
   props: ['card', 'chunkedImages', 'images'],
   data () {
@@ -35,17 +33,9 @@ export default {
     }
   },
   components: {
-    Swiper, Previewer
+    Swiper
   },
   computed: {
-    imageUrls () {
-      return this.images.map(item => {
-        return {
-          msrc: item.src,
-          w: '100'
-        }
-      })
-    },
     imgList () {
       return this.images.map(item => {
         return {
@@ -56,7 +46,7 @@ export default {
   },
   methods: {
     viewImage (row, index) {
-      console.log('viewImage', this.imgList)
+      // console.log('viewImage', this.imgList)
       this.showPreview = true
       this.previewIndex = row * 3 + index
     },
@@ -72,7 +62,6 @@ export default {
   position: relative;
   width: 100%;
   margin-top: 1.17647059em;
-  margin-bottom: 30px;
   background-color: #FFFFFF;
   line-height: 1.41176471;
   font-size: 17px;
@@ -84,8 +73,8 @@ export default {
   top: 0;
   right: 0;
   height: 1px;
-  border-top: 1px solid #eaeaea;
-  color: #eaeaea;
+  border-top: 1px solid #e5e5e5;
+  color: #e5e5e5;
 }
 .weui-cells:after {
   content: " ";
@@ -94,8 +83,8 @@ export default {
   bottom: 0;
   right: 0;
   height: 1px;
-  border-bottom: 1px solid #eaeaea;
-  color: #eaeaea;
+  border-bottom: 1px solid #e5e5e5;
+  color: #e5e5e5;
 }
 .weui-cell {
   padding: 10px 15px;
@@ -151,15 +140,15 @@ export default {
 /* 图片 */
 .gallery--gap,
 .card-address{ margin-top: -15px; }
-.gallery__row{ margin-top: 5px; text-align: left; }
+.gallery__row{ margin-top: 1.3vw; text-align: left; }
 .gallery__row:first-child{ margin-top: 0; }
 .gallery__row .remark-image{
   display: inline-block;
-  width: calc(33.3vw - 37.3px); 
-  height: calc(33.3vw - 37.3px);
+  width: calc(32.4vw - 34px);
+  height: calc(32.4vw - 34px);
   max-height: 110px;
   max-width: 110px;
-  margin-left: 5px; 
+  margin-left: 1.3vw; 
   vertical-align: middle;
   background-size: contain;
   background-position: center; 
