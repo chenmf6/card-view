@@ -117,8 +117,4 @@ export default {
 .card a {
   text-decoration: none;
 }
-
 </style>
-
-
-
