@@ -53,9 +53,8 @@ export default {
 
   created() {
     let url = window.location.href
-    // let url = '/pages/view/view?cardid=1720146&aid=ac1bb8347be75ce6d9403488ae78faef'
     let params = this.parseParams(url)
-    if(util.isEmptyObject(params)) {
+    if (!params) {
       this.alert('没有名片信息', '加载失败')
       return
     }
@@ -79,7 +78,11 @@ export default {
     parseParams(url) {
       let reg = /[?&](cardid|aid)=[^?&]+/g
       let params = {}
-      url.match(reg).forEach(item => {
+      let paramsArr = url.match(reg)
+      if (!paramsArr) {
+        return null
+      }
+      paramsArr.forEach(item => {
         let [key, val = ''] = item.substring(1).split('=')
         params[key] = val
       })

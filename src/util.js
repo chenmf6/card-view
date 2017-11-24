@@ -50,18 +50,10 @@ function chunk (arr, count = 3) {
   return res
 }
 
-function isEmptyObject (e) {
-  for (let t in e) {
-    return false
-  }
-  return true
-}
-
 export default {
   clipImage,
   getAvatar,
   convertNumber,
   formatMobile,
-  chunk,
-  isEmptyObject
+  chunk
 }
